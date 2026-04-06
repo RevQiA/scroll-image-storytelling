@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scroll amb imatges canviants</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, sans-serif;
+      color: white;
+      overflow-x: hidden;
+      background: black;
+    }
+
+    .bg {
+      position: fixed;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transition: background-image 0.6s ease-in-out;
+      z-index: -1;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      z-index: -1;
+    }
+
+    section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem;
+    }
+
+    .content {
+      max-width: 700px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 2rem;
+      border-radius: 16px;
+      backdrop-filter: blur(6px);
+    }
+
+    h1, h2 { margin-bottom: 1rem; }
+    p { font-size: 1.1rem; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <div class="bg" id="bg"></div>
+  <div class="overlay"></div>
+
+  <section data-bg="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80">
+    <div class="content">
+      <h1>Benvingut</h1>
+      <p>Baixa fent scroll i veuràs com el fons canvia en cada secció.</p>
+    </div>
+  </section>
+
+  <section data-bg="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=1600&q=80">
+    <div class="content">
+      <h2>Primera escena</h2>
+      <p>Aquesta secció activa una nova imatge de fons.</p>
+    </div>
+  </section>
+
+  <section data-bg="https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1600&q=80">
+    <div class="content">
+      <h2>Segona escena</h2>
+      <p>Pots fer servir aquest patró per storytelling, productes o presentacions.</p>
+    </div>
+  </section>
+
+  <section data-bg="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80">
+    <div class="content">
+      <h2>Final</h2>
+      <p>El canvi de fons es fa segons la secció visible a la pantalla.</p>
+    </div>
+  </section>
+
+  <script>
+    const sections = document.querySelectorAll('section');
+    const bg = document.getElementById('bg');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const image = entry.target.getAttribute('data-bg');
+          bg.style.backgroundImage = `url('${image}')`;
+        }
+      });
+    }, { threshold: 0.6 });
+
+    sections.forEach((section) => observer.observe(section));
+
+    if (sections[0]) {
+      bg.style.backgroundImage = `url('${sections[0].getAttribute('data-bg')}')`;
+    }
+  </script>
+</body>
+</html>
