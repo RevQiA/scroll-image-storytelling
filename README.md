@@ -1,13 +1,15 @@
-# Scroll Image Storytelling
+# Hommu Studio Showcase
 
-Minimal static webpage prototype where the background image changes as the user scrolls through full-screen sections.
+Static single-page site prepared for Vercel deployment.
 
-## Files
-- `index.html`: complete HTML/CSS/JS prototype
+## What changed
+- Replaced the original scroll experiment with a more polished landing page inspired by the public structure and wording found on `hommustudio.com`
+- Added sections for Hero, Portfolio, Clients, Reel and CTA
+- Kept deployment simple: a single `index.html` with embedded CSS and JavaScript
 
-## Deploy on Vercel
-1. Import this repository in Vercel
-2. Framework preset: **Other**
-3. Deploy with the default settings
+## Public source references used
+- Main site: https://www.hommustudio.com/
+- Portfolio CTA: https://www.hommustudio.com/portfolio-2/
 
-No build step is required.
+## Deploy
+Import the repository into Vercel and deploy it as a static site with default settings.

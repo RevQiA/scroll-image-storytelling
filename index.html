@@ -1,106 +1,549 @@
 <!DOCTYPE html>
-<html lang="ca">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Scroll amb imatges canviants</title>
+  <title>Hommu Studio — Creative Showcase</title>
+  <meta name="description" content="Agencia de publicidad creativa multidisciplinar. Pensamos, desarrollamos y producimos campañas y conceptos de publicidad transversales para marcas o entidades que buscan algo relevante y diferenciador." />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: Arial, sans-serif;
-      color: white;
-      overflow-x: hidden;
-      background: black;
+    :root {
+      --bg: #f5f1e8;
+      --paper: rgba(255,255,255,0.72);
+      --paper-strong: rgba(255,255,255,0.88);
+      --ink: #101010;
+      --muted: #5e5a54;
+      --line: rgba(16,16,16,0.08);
+      --accent: #1637ff;
+      --shadow: 0 20px 60px rgba(0,0,0,0.14);
+      --radius: 24px;
+      --max: 1180px;
     }
 
-    .bg {
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .bg-layer {
       position: fixed;
       inset: 0;
+      background-image: linear-gradient(rgba(15,15,15,0.20), rgba(15,15,15,0.20)), url('https://www.hommustudio.com/wp-content/uploads/2016/12/animation2.gif');
       background-size: cover;
       background-position: center;
-      transition: background-image 0.6s ease-in-out;
-      z-index: -1;
+      transition: background-image 500ms ease, transform 500ms ease;
+      z-index: -2;
+      transform: scale(1.03);
     }
 
-    .overlay {
+    .grain {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.35);
+      background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.14), transparent 30%), radial-gradient(circle at 80% 10%, rgba(255,255,255,0.08), transparent 22%), radial-gradient(circle at 50% 80%, rgba(0,0,0,0.12), transparent 28%);
       z-index: -1;
+      pointer-events: none;
+    }
+
+    .shell {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 14px;
+      z-index: 20;
+      padding: 14px 0;
+    }
+
+    .topbar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 18px;
+      background: rgba(255,255,255,0.62);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,0.55);
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+    }
+
+    .nav {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav a {
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    main { padding-bottom: 48px; }
+
+    .panel {
+      background: var(--paper);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,0.55);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
     }
 
     section {
-      min-height: 100vh;
+      scroll-margin-top: 92px;
+      margin: 18px 0;
+      overflow: hidden;
+    }
+
+    .hero {
+      min-height: calc(100vh - 120px);
+      display: grid;
+      align-items: end;
+      padding: 38px;
+    }
+
+    .hero-card {
+      max-width: 760px;
+      background: var(--paper-strong);
+      border-radius: 28px;
+      padding: 30px;
+      border: 1px solid rgba(16,16,16,0.06);
+    }
+
+    .eyebrow {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      font-size: clamp(2.8rem, 7vw, 6.2rem);
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+      margin-bottom: 18px;
+    }
+
+    .lead {
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      color: var(--muted);
+      max-width: 58ch;
+    }
+
+    .hero-actions {
+      margin-top: 24px;
       display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 3rem;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 14px 22px;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      transition: transform 160ms ease, background 160ms ease;
     }
 
-    .content {
-      max-width: 700px;
+    .btn:hover { transform: translateY(-1px); }
+    .btn.primary { background: var(--accent); color: white; border-color: transparent; }
+    .btn.secondary { background: rgba(255,255,255,0.72); }
+
+    .section-head {
+      padding: 28px 28px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .section-head h2 {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      letter-spacing: -0.05em;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      max-width: 56ch;
+    }
+
+    .portfolio-grid {
+      padding: 28px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .project {
+      position: relative;
+      min-height: 320px;
+      border-radius: 22px;
+      overflow: hidden;
+      background: #ddd;
+      color: white;
+      display: flex;
+      align-items: end;
+      isolation: isolate;
+    }
+
+    .project::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.72));
+      z-index: 0;
+    }
+
+    .project img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      transition: transform 500ms ease;
+    }
+
+    .project:hover img { transform: scale(1.04); }
+
+    .project-copy {
+      position: relative;
+      z-index: 1;
+      padding: 22px;
+    }
+
+    .project-kind {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      opacity: 0.8;
+      margin-bottom: 10px;
+    }
+
+    .project h3 {
+      font-size: 1.4rem;
+      line-height: 1.04;
+    }
+
+    .clients-grid {
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 18px;
+    }
+
+    .clients-copy, .clients-collage, .reel-wrap, .cta-wrap {
+      padding: 28px;
+    }
+
+    .clients-copy p, .cta-wrap p { color: var(--muted); }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .stat {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.54);
+      border: 1px solid var(--line);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.6rem;
+      letter-spacing: -0.05em;
+      margin-bottom: 4px;
+    }
+
+    .logo-wall {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .logo-wall img {
+      width: 100%;
+      height: 170px;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+    }
+
+    .reel-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .reel-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .reel-copy p { color: var(--muted); }
+
+    .reel-frame {
+      position: relative;
+      min-height: 420px;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #000;
+    }
+
+    .reel-frame iframe {
+      width: 100%;
+      height: 100%;
+      min-height: 420px;
+      border: 0;
+    }
+
+    .cta-wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer {
+      padding: 6px 0 18px;
       text-align: center;
-      background: rgba(0, 0, 0, 0.35);
-      padding: 2rem;
-      border-radius: 16px;
-      backdrop-filter: blur(6px);
+      color: rgba(16,16,16,0.65);
+      font-size: 0.92rem;
     }
 
-    h1, h2 { margin-bottom: 1rem; }
-    p { font-size: 1.1rem; line-height: 1.6; }
+    @media (max-width: 980px) {
+      .portfolio-grid,
+      .clients-grid,
+      .reel-layout {
+        grid-template-columns: 1fr;
+      }
+      .portfolio-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 680px) {
+      .topbar-inner { border-radius: 24px; align-items: flex-start; }
+      .nav { justify-content: flex-start; }
+      .hero { padding: 18px; min-height: auto; }
+      .hero-card { padding: 24px; }
+      .section-head, .portfolio-grid, .clients-copy, .clients-collage, .reel-wrap, .cta-wrap { padding: 20px; }
+      .portfolio-grid { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: 1fr; }
+      .logo-wall { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
-  <div class="bg" id="bg"></div>
-  <div class="overlay"></div>
+  <div class="bg-layer" id="bg-layer"></div>
+  <div class="grain"></div>
 
-  <section data-bg="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80">
-    <div class="content">
-      <h1>Benvingut</h1>
-      <p>Baixa fent scroll i veuràs com el fons canvia en cada secció.</p>
+  <div class="shell topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#hero">Hommu Studio</a>
+      <nav class="nav">
+        <a href="#portfolio">Portfolio</a>
+        <a href="#clients">Clientes</a>
+        <a href="#reel">Reel</a>
+        <a href="#cta">Más proyectos</a>
+      </nav>
     </div>
-  </section>
+  </div>
 
-  <section data-bg="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=1600&q=80">
-    <div class="content">
-      <h2>Primera escena</h2>
-      <p>Aquesta secció activa una nova imatge de fons.</p>
-    </div>
-  </section>
+  <main class="shell">
+    <section id="hero" class="panel hero" data-bg="https://www.hommustudio.com/wp-content/uploads/2016/12/animation2.gif">
+      <div class="hero-card">
+        <div class="eyebrow">Agencia creativa multidisciplinar</div>
+        <h1>Hommu Studio</h1>
+        <p class="lead">Pensamos, desarrollamos y producimos campañas y conceptos de publicidad transversales para marcas o entidades que buscan algo relevante y diferenciador.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#portfolio">Ver últimos proyectos</a>
+          <a class="btn secondary" href="https://www.hommustudio.com/portfolio-2/" target="_blank" rel="noreferrer">Descubre más proyectos</a>
+        </div>
+      </div>
+    </section>
 
-  <section data-bg="https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1600&q=80">
-    <div class="content">
-      <h2>Segona escena</h2>
-      <p>Pots fer servir aquest patró per storytelling, productes o presentacions.</p>
-    </div>
-  </section>
+    <section id="portfolio" class="panel" data-bg="https://www.hommustudio.com/wp-content/uploads/2019/09/hommu_studio_mercatflors_novatemp_thumb2.jpg">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Portfolio</div>
+          <h2>Últimos proyectos</h2>
+        </div>
+        <p>Selección de trabajos públicos extraídos de hommustudio.com, presentados en un formato más editorial y visual para una landing de showcase.</p>
+      </div>
+      <div class="portfolio-grid">
+        <a class="project" href="https://www.hommustudio.com/work/campana-temporada-201920-mercat-les-flors/" target="_blank" rel="noreferrer">
+          <img src="https://www.hommustudio.com/wp-content/uploads/2019/09/hommu_studio_mercatflors_novatemp_thumb2.jpg" alt="CAMPAÑA TEMPORADA 2019/20 PARA EL MERCAT DE LES FLORS" />
+          <div class="project-copy"><div class="project-kind">360 Campaigns</div><h3>CAMPAÑA TEMPORADA 2019/20 PARA EL MERCAT DE LES FLORS</h3></div>
+        </a>
+        <a class="project" href="https://www.hommustudio.com/work/cipresaia/" target="_blank" rel="noreferrer">
+          <img src="https://www.hommustudio.com/wp-content/uploads/2023/07/hommu_studio_predict_thumb.jpg" alt="Cipresaia" />
+          <div class="project-copy"><div class="project-kind">Identity</div><h3>Cipresaia</h3></div>
+        </a>
+        <a class="project" href="https://www.hommustudio.com/work/ecoedicio/" target="_blank" rel="noreferrer">
+          <img src="https://www.hommustudio.com/wp-content/uploads/2023/07/hommu_studio_ecoedicio_thumb.jpg" alt="Ecoedicio" />
+          <div class="project-copy"><div class="project-kind">Identity</div><h3>Ecoedicio</h3></div>
+        </a>
+        <a class="project" href="https://www.hommustudio.com/work/predict-by/" target="_blank" rel="noreferrer">
+          <img src="https://www.hommustudio.com/wp-content/uploads/2023/06/hommu_studio_predict_thumb.jpg" alt="Predict By" />
+          <div class="project-copy"><div class="project-kind">Identity</div><h3>Predict By</h3></div>
+        </a>
+        <a class="project" href="https://www.hommustudio.com/work/arico-forest/" target="_blank" rel="noreferrer">
+          <img src="https://www.hommustudio.com/wp-content/uploads/2025/01/hommu_arico_thumb_v01.jpg" alt="Arico Forest" />
+          <div class="project-copy"><div class="project-kind">Identity</div><h3>Arico Forest</h3></div>
+        </a>
+        <a class="project" href="https://www.hommustudio.com/work/menjadors-biosca/" target="_blank" rel="noreferrer">
+          <img src="https://www.hommustudio.com/wp-content/uploads/2025/01/hommu_biosca_thumb.jpg" alt="Menjadors Biosca" />
+          <div class="project-copy"><div class="project-kind">Identity</div><h3>Menjadors Biosca</h3></div>
+        </a>
+        <a class="project" href="https://www.hommustudio.com/work/mica/" target="_blank" rel="noreferrer">
+          <img src="https://www.hommustudio.com/wp-content/uploads/2021/01/hommu_studio_mica_thumb.jpg" alt="Mica" />
+          <div class="project-copy"><div class="project-kind">Identity</div><h3>Mica</h3></div>
+        </a>
+        <a class="project" href="https://www.hommustudio.com/work/montibello-denuee/" target="_blank" rel="noreferrer">
+          <img src="https://www.hommustudio.com/wp-content/uploads/2021/01/hommustudio_denuee_thumb-1.jpg" alt="Montibello Denuée" />
+          <div class="project-copy"><div class="project-kind">Identity</div><h3>Montibello Denuée</h3></div>
+        </a>
+        <a class="project" href="https://www.hommustudio.com/work/habitat-apartments/" target="_blank" rel="noreferrer">
+          <img src="https://www.hommustudio.com/wp-content/uploads/2025/01/hommu_studio_thumb_02_habitat.jpg" alt="Habitat Apartments" />
+          <div class="project-copy"><div class="project-kind">Identity</div><h3>Habitat Apartments</h3></div>
+        </a>
+        <a class="project" href="https://www.hommustudio.com/work/mim/" target="_blank" rel="noreferrer">
+          <img src="https://www.hommustudio.com/wp-content/uploads/2022/03/hommu_studio_mim_mimiatura.jpg" alt="Mim" />
+          <div class="project-copy"><div class="project-kind">Identity</div><h3>Mim</h3></div>
+        </a>
+        <a class="project" href="https://www.hommustudio.com/work/vw-the-original-fest/" target="_blank" rel="noreferrer">
+          <img src="https://www.hommustudio.com/wp-content/uploads/2021/07/hommustudio_altus_thumb-1.jpg" alt="VW The Original Fest" />
+          <div class="project-copy"><div class="project-kind">Identity</div><h3>VW The Original Fest</h3></div>
+        </a>
+        <a class="project" href="https://www.hommustudio.com/work/smartech/" target="_blank" rel="noreferrer">
+          <img src="https://www.hommustudio.com/wp-content/uploads/2023/07/hommu_studio_smartech_thumb_4.jpg" alt="Smartech" />
+          <div class="project-copy"><div class="project-kind">Identity</div><h3>Smartech</h3></div>
+        </a>
+        <a class="project" href="https://www.hommustudio.com/work/altus-campaign-aw-21/" target="_blank" rel="noreferrer">
+          <img src="https://www.hommustudio.com/wp-content/uploads/2021/07/hommustudio_altus_thumb.jpg" alt="Altus Campaign A/W 21" />
+          <div class="project-copy"><div class="project-kind">Identity</div><h3>Altus Campaign A/W 21</h3></div>
+        </a>
+        <a class="project" href="https://www.hommustudio.com/work/otra_cosa/" target="_blank" rel="noreferrer">
+          <img src="https://www.hommustudio.com/wp-content/uploads/2022/03/hommu_studio_otracosa_thubnail.png" alt="Otra Cosa" />
+          <div class="project-copy"><div class="project-kind">Identity</div><h3>Otra Cosa</h3></div>
+        </a>
+        <a class="project" href="https://www.hommustudio.com/work/instagram-revlon-professional/" target="_blank" rel="noreferrer">
+          <img src="https://www.hommustudio.com/wp-content/uploads/2017/05/hommustudio_instagram_RP_thumb_2.jpg" alt="INSTAGRAM MANAGEMENT REVLON PROFESSIONAL" />
+          <div class="project-copy"><div class="project-kind">Dirección de Arte</div><h3>INSTAGRAM MANAGEMENT REVLON PROFESSIONAL</h3></div>
+        </a>
+      </div>
+    </section>
 
-  <section data-bg="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80">
-    <div class="content">
-      <h2>Final</h2>
-      <p>El canvi de fons es fa segons la secció visible a la pantalla.</p>
-    </div>
-  </section>
+    <section id="clients" class="panel" data-bg="https://www.hommustudio.com/wp-content/uploads/2017/02/clientes_3.jpg">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Clientes</div>
+          <h2>Con los que trabajamos</h2>
+        </div>
+        <p>Prueba social para reforzar posicionamiento: marcas, campañas y colaboraciones que comunican experiencia creativa y visión transversal.</p>
+      </div>
+      <div class="clients-grid">
+        <div class="panel clients-copy">
+          <h3>Creatividad aplicada a marcas que quieren destacar</h3>
+          <p>Hommu Studio combina estrategia, dirección de arte y ejecución para convertir ideas en piezas con impacto cultural y comercial.</p>
+          <div class="stats">
+            <div class="stat"><strong>15+</strong><span>proyectos destacados en esta selección</span></div>
+            <div class="stat"><strong>360º</strong><span>enfoque transversal en campañas y contenido</span></div>
+            <div class="stat"><strong>BCN</strong><span>base creativa con mirada multidisciplinar</span></div>
+          </div>
+        </div>
+        <div class="panel clients-collage">
+          <div class="logo-wall">
+            <img src="https://www.hommustudio.com/wp-content/uploads/2017/02/clientes_3.jpg" alt="Clientes collage 1" />
+            <img src="https://www.hommustudio.com/wp-content/uploads/2017/02/clientes_2-1.jpg" alt="Clientes collage 2" />
+            <img src="https://www.hommustudio.com/wp-content/uploads/2017/02/agencias_2.jpg" alt="Clientes collage 3" />
+            <img src="https://www.hommustudio.com/wp-content/uploads/2017/02/clientes_1.png" alt="Clientes collage 4" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="reel" class="panel reel-wrap" data-bg="https://www.hommustudio.com/wp-content/uploads/2017/02/agencias_2.jpg">
+      <div class="reel-layout">
+        <div class="reel-copy">
+          <div>
+            <div class="eyebrow">Reel</div>
+            <h2>Lo que hacemos en un plis plás</h2>
+          </div>
+          <p>Una sección pensada para concentrar el pitch del estudio en formato audiovisual. Se mantiene embebible y simple para que el despliegue siga siendo estático.</p>
+          <a class="btn primary" href="https://www.hommustudio.com/portfolio-2/" target="_blank" rel="noreferrer">Ver más trabajos</a>
+        </div>
+        <div class="reel-frame">
+          <iframe src="https://www.youtube-nocookie.com/embed/ScMzIvxBSi4?rel=0" title="Lo que hacemos en un plis plás" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+
+    <section id="cta" class="panel" data-bg="https://www.hommustudio.com/wp-content/uploads/2022/03/hommu_studio_otracosa_thubnail.png">
+      <div class="cta-wrap">
+        <div>
+          <div class="eyebrow">CTA</div>
+          <h2>Descubre más proyectos</h2>
+          <p>Acceso directo al portfolio público completo de Hommu Studio.</p>
+        </div>
+        <a class="btn primary" href="https://www.hommustudio.com/portfolio-2/" target="_blank" rel="noreferrer">Descubre más proyectos</a>
+      </div>
+    </section>
+  </main>
+
+  <div class="shell footer">Built as a static single-page showcase for Vercel deployment.</div>
 
   <script>
-    const sections = document.querySelectorAll('section');
-    const bg = document.getElementById('bg');
+    const bgLayer = document.getElementById('bg-layer');
+    const sections = document.querySelectorAll('section[data-bg]');
+
+    const updateBackground = (url) => {
+      bgLayer.style.backgroundImage = `linear-gradient(rgba(15,15,15,0.20), rgba(15,15,15,0.20)), url('${url}')`;
+    };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          const image = entry.target.getAttribute('data-bg');
-          bg.style.backgroundImage = `url('${image}')`;
+          updateBackground(entry.target.dataset.bg);
         }
       });
-    }, { threshold: 0.6 });
+    }, { threshold: 0.45 });
 
     sections.forEach((section) => observer.observe(section));
-
-    if (sections[0]) {
-      bg.style.backgroundImage = `url('${sections[0].getAttribute('data-bg')}')`;
-    }
+    if (sections[0]) updateBackground(sections[0].dataset.bg);
   </script>
 </body>
 </html>
